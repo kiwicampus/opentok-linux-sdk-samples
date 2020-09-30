@@ -57,12 +57,15 @@ static otk_thread_func_return_type capturer_thread_start_function(void *arg)
 
   uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * video_capturer->width * video_capturer->height * 3);
 
+  std::cout << "STARTING STREAMING LOOP" << std::endl;
+
   while (video_capturer->capturer_thread_exit.load() == false)
   {
     // Mat frame;
     // cap >> frame; // get a new frame from camera
     // std::cout << "Frame size: " << frame.rows << "x" << frame.cols << std::endl;
 
+    // std::cout << "Loop..." << std::endl;
     memset(buffer, generate_random_integer() & 0xFF, video_capturer->width * video_capturer->height * 3);
     // memcpy(buffer, frame.data, frame.total() * frame.elemSize());
 
@@ -166,6 +169,8 @@ static void on_session_connected(otc_session *session, void *user_data)
     }
     std::cout << "Could not publish successfully" << std::endl;
   }
+  else
+    std::cout << __FUNCTION__ << " session and publisher is null" << std::endl;
 }
 
 static void on_session_connection_created(otc_session *session,
@@ -318,7 +323,7 @@ int main(int argc, char **argv)
   signal(SIGINT, signal_callback_handler);
   while (RUN_LOOP)
   {
-    std::cout << "Program processing..." << std::endl;
+    // std::cout << "Program processing..." << std::endl;
     sleep(1);
   }
 
