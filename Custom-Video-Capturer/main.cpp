@@ -263,10 +263,17 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-#ifdef CONSOLE_LOGGING
+  // OTC_LOG_LEVEL_DISABLED = 0, /**< No messages enum value. */
+  // OTC_LOG_LEVEL_FATAL = 2, /**< Fatal level messages. */
+  // OTC_LOG_LEVEL_ERROR = 3, /**< Error level messages. */
+  // OTC_LOG_LEVEL_WARN  = 4, /**< Warning level messages. */
+  // OTC_LOG_LEVEL_INFO  = 5, /**< Info level messages. */
+  // OTC_LOG_LEVEL_DEBUG = 6, /**< Debug level messages. */
+  // OTC_LOG_LEVEL_MSG = 7, /**< Message level messages. */
+  // OTC_LOG_LEVEL_TRACE = 8, /**< Trace level messages. */
+  // OTC_LOG_LEVEL_ALL = 100 /**< All messages. */
   otc_log_set_logger_callback(on_otc_log_message);
-  otc_log_enable(OTC_LOG_LEVEL_ALL);
-#endif
+  otc_log_enable(OTC_LOG_LEVEL_INFO);
 
   struct otc_session_callbacks session_callbacks = {0};
   session_callbacks.on_connected = on_session_connected;
