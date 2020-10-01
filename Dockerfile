@@ -1,20 +1,11 @@
-FROM debian:buster
-
-RUN echo "deb http://security.debian.org/ buster/updates main" | tee -a /etc/apt/sources.list
-
-RUN apt-get update \
-    && apt-get -yqqf --no-install-recommends install \
-       ca-certificates \
-       wget \
-       gnupg \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN echo "deb https://dl.bintray.com/tokbox/debian buster main" | tee -a /etc/apt/sources.list
-RUN wget -O- -q https://bintray.com/user/downloadSubjectPublicKey?username=bintray | apt-key add -
+# FROM balenalib/jetson-xavier-ubuntu:bionic
+FROM arm64v8/ubuntu:bionic
 
 RUN apt-get update \
   && apt-get install -y \
+     ca-certificates \
+     wget \
+     gnupg \
      software-properties-common \
      build-essential \
      cmake \
@@ -22,11 +13,24 @@ RUN apt-get update \
      libc++-dev \
      libc++abi-dev \
      libsdl2-dev \
-     libopentok-dev \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-VOLUME /samples
-WORKDIR /samples/scripts
+WORKDIR /home/app/assets
 
-CMD bash -x build.sh
+RUN wget https://tokbox.com/downloads/libopentok_linux_llvm_arm64-2.18.0 \
+    && tar -xvf libopentok_linux_llvm_arm64-2.18.0 \
+    && rm -r libopentok_linux_llvm_arm64-2.18.0 \
+    && export LD_LIBRARY_PATH=${PWD}/libopentok_linux_llvm_arm64/lib:$LD_LIBRARY_PATH
+
+WORKDIR /home/app
+
+COPY ./common common
+COPY ./Custom-Video-Capturer Custom-Video-Capturer
+
+ENV CXXFLAGS -pthread
+
+RUN cd Custom-Video-Capturer && rm -r build && mkdir build && cd build &&  CC=clang CXX=clang++ cmake .. && make
+
+WORKDIR /home/app/Custom-Video-Capturer/build
+CMD ["./custom_video_capturer"]

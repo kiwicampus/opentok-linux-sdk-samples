@@ -10,19 +10,19 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCONSOLE_LOGGING")
 
 FIND_PACKAGE(Threads)
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
 
 INCLUDE(FindPkgConfig)
 
 ADD_SUBDIRECTORY(
-   ${CMAKE_CURRENT_SOURCE_DIR}/../../Kronos-Project/rover/ros2/libs/libopentok_linux_llvm_arm64
+   ${CMAKE_CURRENT_SOURCE_DIR}/../assets/libopentok_linux_llvm_arm64
     ${CMAKE_CURRENT_BINARY_DIR}/libopentok
 )
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}/../common/src
     $<TARGET_PROPERTY:libopentok,INTERFACE_INCLUDE_DIRECTORIES>
-    ${OpenCV_INCLUDE_DIRS}
+    #${OpenCV_INCLUDE_DIRS}
     )
 
 ADD_EXECUTABLE(
@@ -33,5 +33,5 @@ ADD_EXECUTABLE(
 TARGET_LINK_LIBRARIES(
     ${PROJECT_NAME}
     libopentok
-    ${OpenCV_LIBS}
+    #${OpenCV_LIBS}
 ) 

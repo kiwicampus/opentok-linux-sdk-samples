@@ -9,9 +9,9 @@
 #include "otk_thread.h"
 #include <signal.h>
 
-#include "opencv2/opencv.hpp"
+// #include "opencv2/opencv.hpp"
 
-using namespace cv;
+// using namespace cv;
 
 static std::atomic<bool>
     g_is_connected(false);
@@ -273,7 +273,8 @@ int main(int argc, char **argv)
   // OTC_LOG_LEVEL_TRACE = 8, /**< Trace level messages. */
   // OTC_LOG_LEVEL_ALL = 100 /**< All messages. */
   otc_log_set_logger_callback(on_otc_log_message);
-  otc_log_enable(OTC_LOG_LEVEL_INFO);
+  // otc_log_enable(OTC_LOG_LEVEL_INFO);
+  otc_log_enable(OTC_LOG_LEVEL_WARN);
 
   struct otc_session_callbacks session_callbacks = {0};
   session_callbacks.on_connected = on_session_connected;
