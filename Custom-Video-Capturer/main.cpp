@@ -21,7 +21,8 @@ static std::atomic<bool> g_is_publishing(false);
 bool RUN_LOOP = true;
 void signal_callback_handler(int signum)
 {
-  std::cout << "Caught signal " << signum << std::endl;
+  std::cout << "[MY CODE]: "
+            << "Caught signal " << signum << std::endl;
   // Terminate program
   //  exit(signum);
   RUN_LOOP = false;
@@ -57,15 +58,16 @@ static otk_thread_func_return_type capturer_thread_start_function(void *arg)
 
   uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t) * video_capturer->width * video_capturer->height * 3);
 
-  std::cout << "STARTING STREAMING LOOP" << std::endl;
+  std::cout << "[MY CODE]: "
+            << "STARTING STREAMING LOOP" << std::endl;
 
   while (video_capturer->capturer_thread_exit.load() == false)
   {
     // Mat frame;
     // cap >> frame; // get a new frame from camera
-    // std::cout << "Frame size: " << frame.rows << "x" << frame.cols << std::endl;
+    // std::cout << "[MY CODE]: "<< "Frame size: " << frame.rows << "x" << frame.cols << std::endl;
 
-    // std::cout << "Loop..." << std::endl;
+    // std::cout << "[MY CODE]: "<< "Loop..." << std::endl;
     memset(buffer, generate_random_integer() & 0xFF, video_capturer->width * video_capturer->height * 3);
     // memcpy(buffer, frame.data, frame.total() * frame.elemSize());
 
@@ -156,7 +158,7 @@ static otc_bool get_video_capturer_capture_settings(const otc_video_capturer *ca
 
 static void on_session_connected(otc_session *session, void *user_data)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 
   g_is_connected = true;
 
@@ -167,43 +169,44 @@ static void on_session_connected(otc_session *session, void *user_data)
       g_is_publishing = true;
       return;
     }
-    std::cout << "Could not publish successfully" << std::endl;
+    std::cout << "[MY CODE]: "
+              << "Could not publish successfully" << std::endl;
   }
   else
-    std::cout << __FUNCTION__ << " session and publisher is null" << std::endl;
+    std::cout << "[MY CODE]: " << __FUNCTION__ << " session and publisher is null" << std::endl;
 }
 
 static void on_session_connection_created(otc_session *session,
                                           void *user_data,
                                           const otc_connection *connection)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_session_connection_dropped(otc_session *session,
                                           void *user_data,
                                           const otc_connection *connection)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_session_stream_received(otc_session *session,
                                        void *user_data,
                                        const otc_stream *stream)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_session_stream_dropped(otc_session *session,
                                       void *user_data,
                                       const otc_stream *stream)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_session_disconnected(otc_session *session, void *user_data)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_session_error(otc_session *session,
@@ -211,15 +214,72 @@ static void on_session_error(otc_session *session,
                              const char *error_string,
                              enum otc_session_error_code error)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
-  std::cout << "Session error. Error : " << error_string << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: "
+            << "Session error. Error: " << error_string << " Code: " << error << std::endl;
 }
+
+static void on_session_reconnected(otc_session *session, void *user_data)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
+}
+
+static void on_session_reconnection_started(otc_session *session, void *user_data)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
+}
+
+static void on_session_signal_received(otc_session *session,
+                                       void *user_data,
+                                       const char *type,
+                                       const char *signal,
+                                       const otc_connection *connection)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
+}
+
+static void on_session_stream_has_audio_changed(otc_session *session,
+                                                void *user_data,
+                                                const otc_stream *stream,
+                                                otc_bool has_audio)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << has_audio << std::endl;
+}
+
+/**
+      Called when a stream toggles video on or off.
+
+      @param session A pointer to the otc_session struct.
+
+      @param user_data A pointer to the user_data you set for the session.
+
+      @param stream Whether the stream now has video (OTC_TRUE) or not (OTC_FALSE).
+*/
+
+static void on_session_stream_has_video_changed(otc_session *session,
+                                                void *user_data,
+                                                const otc_stream *stream,
+                                                otc_bool has_video)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function " << has_video << std::endl;
+}
+
+static void on_session_stream_video_dimensions_changed(otc_session *session,
+                                                       void *user_data,
+                                                       const otc_stream *stream,
+                                                       int width,
+                                                       int height)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function. Dimensions: " << width << "x" << height << std::endl;
+}
+
+// ************ Publisher callbacks
 
 static void on_publisher_stream_created(otc_publisher *publisher,
                                         void *user_data,
                                         const otc_stream *stream)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_publisher_render_frame(otc_publisher *publisher,
@@ -232,23 +292,71 @@ static void on_publisher_render_frame(otc_publisher *publisher,
   //   return;
   // }
   // render_manager->addFrame(publisher, frame);
+  // std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_publisher_stream_destroyed(otc_publisher *publisher,
                                           void *user_data,
                                           const otc_stream *stream)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
 }
 
 static void on_publisher_error(otc_publisher *publisher,
                                void *user_data,
                                const char *error_string,
-                               enum otc_publisher_error_code error_code)
+                               enum otc_publisher_error_code error)
 {
-  std::cout << __FUNCTION__ << " callback function" << std::endl;
-  std::cout << "Publisher error. Error code: " << error_string << std::endl;
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function" << std::endl;
+  std::cout << "[MY CODE]: "
+            << "Publisher error. Error: " << error_string << " Code: " << error << std::endl;
 }
+
+static void on_audio_stats(otc_publisher *publisher,
+                           void *user_data,
+                           struct otc_publisher_audio_stats audio_stats[],
+                           size_t number_of_stats)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function. # Stats: " << number_of_stats << std::endl;
+}
+
+/**
+      Called periodically to report video statistics for the publisher.
+
+      @param publisher A pointer to the publisher.
+      @param user_data A pointer to the user_data you set for the publisher.
+      @param video_stats An array of publisher video stats.
+      @param number_of_stats The number of video stats in the array.
+*/
+// struct otc_publisher_video_stats {
+//   const char* connection_id; /**< The connection ID of the client subscribing to the stream. */
+//   const char* subscriber_id; /**< The subscriber ID of the client subscribing to the stream (in a relayed session). */
+//   int64_t packets_lost; /**< The total number of video packets packets that did not reach the subscriber (or the OpenTok Media Router). */
+//   int64_t packets_sent; /**< The total number of video packets sent sent to the subscriber (or to the OpenTok Media Router). */
+//   int64_t bytes_sent; /**< The total number of video bytes bytes sent to the subscriber (or to the OpenTok Media Router). */
+//   double timestamp; /**< The timestamp, in milliseconds since the Unix epoch, for when these stats were gathered. */
+//   double start_time; /**< The timestamp, in milliseconds since the Unix epoch, from which the cumulative totals started accumulating. */
+// };
+static void on_video_stats(otc_publisher *publisher,
+                           void *user_data,
+                           struct otc_publisher_video_stats video_stats[],
+                           size_t number_of_stats)
+{
+  std::cout << "[MY CODE]: " << __FUNCTION__ << " callback function. # Stats: " << number_of_stats << std::endl;
+  for (int i = 0; i < number_of_stats; ++i)
+  {
+    struct otc_publisher_video_stats stats = video_stats[i];
+    std::cout << "[MY CODE]: " << __FUNCTION__ << " Connection_id : " << stats.connection_id;
+    // std::cout << " subscriber_id : " << stats.subscriber_id;
+    std::cout << " packets_lost : " << stats.packets_lost;
+    std::cout << " packets_sent : " << stats.packets_sent;
+    std::cout << " bytes_sent : " << stats.bytes_sent;
+    // std::cout << " timestamp : " << stats.timestamp;
+    // std::cout << " start_time : " << stats.start_time << std::endl;
+  }
+}
+
+// General callback
 
 static void on_otc_log_message(const char *message)
 {
@@ -259,7 +367,8 @@ int main(int argc, char **argv)
 {
   if (otc_init(nullptr) != OTC_SUCCESS)
   {
-    std::cout << "Could not init OpenTok library" << std::endl;
+    std::cout << "[MY CODE]: "
+              << "Could not init OpenTok library" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -274,7 +383,8 @@ int main(int argc, char **argv)
   // OTC_LOG_LEVEL_ALL = 100 /**< All messages. */
   otc_log_set_logger_callback(on_otc_log_message);
   // otc_log_enable(OTC_LOG_LEVEL_INFO);
-  otc_log_enable(OTC_LOG_LEVEL_WARN);
+  // otc_log_enable(OTC_LOG_LEVEL_WARN);
+  // otc_log_enable(OTC_LOG_LEVEL_ALL);
 
   struct otc_session_callbacks session_callbacks = {0};
   session_callbacks.on_connected = on_session_connected;
@@ -284,13 +394,20 @@ int main(int argc, char **argv)
   session_callbacks.on_stream_dropped = on_session_stream_dropped;
   session_callbacks.on_disconnected = on_session_disconnected;
   session_callbacks.on_error = on_session_error;
+  session_callbacks.on_reconnected = on_session_reconnected;
+  session_callbacks.on_reconnection_started = on_session_reconnection_started;
+  session_callbacks.on_signal_received = on_session_signal_received;
+  session_callbacks.on_stream_has_audio_changed = on_session_stream_has_audio_changed;
+  session_callbacks.on_stream_has_video_changed = on_session_stream_has_video_changed;
+  session_callbacks.on_stream_video_dimensions_changed = on_session_stream_video_dimensions_changed;
 
   otc_session *session = nullptr;
   session = otc_session_new(API_KEY, SESSION_ID, &session_callbacks);
 
   if (session == nullptr)
   {
-    std::cout << "Could not create OpenTok session successfully" << std::endl;
+    std::cout << "[MY CODE]: "
+              << "Could not create OpenTok session successfully" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -311,16 +428,22 @@ int main(int argc, char **argv)
   publisher_callbacks.on_render_frame = on_publisher_render_frame;
   publisher_callbacks.on_stream_destroyed = on_publisher_stream_destroyed;
   publisher_callbacks.on_error = on_publisher_error;
+  // publisher_callbacks.on_audio_stats = on_audio_stats;
+  // publisher_callbacks.on_video_stats = on_video_stats;
 
   g_publisher = otc_publisher_new("opentok-linux-sdk-samples",
                                   &(video_capturer->video_capturer_callbacks),
                                   &publisher_callbacks);
   if (g_publisher == nullptr)
   {
-    std::cout << "Could not create OpenTok publisher successfully" << std::endl;
+    std::cout << "[MY CODE]: "
+              << "Could not create OpenTok publisher successfully" << std::endl;
     otc_session_delete(session);
     return EXIT_FAILURE;
   }
+
+  // otc_publisher_set_publish_audio(g_publisher, false);
+
   // renderer_manager.createRenderer(g_publisher);
 
   otc_session_connect(session, TOKEN);
@@ -331,7 +454,7 @@ int main(int argc, char **argv)
   signal(SIGINT, signal_callback_handler);
   while (RUN_LOOP)
   {
-    // std::cout << "Program processing..." << std::endl;
+    // std::cout << "[MY CODE]: "<< "Program processing..." << std::endl;
     sleep(1);
   }
 

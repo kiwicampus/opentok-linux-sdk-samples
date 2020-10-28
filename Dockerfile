@@ -25,12 +25,19 @@ RUN wget https://tokbox.com/downloads/libopentok_linux_llvm_arm64-2.18.0 \
 
 WORKDIR /home/app
 
+RUN apt-get update \
+  && apt-get install -y \
+     alsa-utils \
+     pulseaudio \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV CXXFLAGS -pthread
 COPY ./common common
 COPY ./Custom-Video-Capturer Custom-Video-Capturer
 
-ENV CXXFLAGS -pthread
 
-RUN cd Custom-Video-Capturer && rm -r build && mkdir build && cd build &&  CC=clang CXX=clang++ cmake .. && make
+RUN cd Custom-Video-Capturer && rm -rf build && mkdir build && cd build &&  CC=clang CXX=clang++ cmake .. && make
 
 WORKDIR /home/app/Custom-Video-Capturer/build
 CMD ["./custom_video_capturer"]
